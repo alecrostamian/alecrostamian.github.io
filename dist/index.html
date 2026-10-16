@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#eeeee9">
+<title>Alec Rostamian</title>
+<meta name="description" content="Alec Rostamian — projects, curriculum vitae, and contact.">
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./style.css?v=20261016-migration">
+</head>
+<body>
+<main class="stage" aria-label="Alec Rostamian's portfolio">
+<div class="card" id="card">
+<section class="face front" id="front" aria-label="Business card front">
+<div class="embossed-frame" aria-hidden="true"></div>
+<h1>Alec Rostamian</h1>
+<button class="flip-button" id="flip" aria-label="Flip business card and start soundtrack">flip me<span class="button-line" aria-hidden="true"></span></button>
+</section>
+<section class="face back" id="back" aria-label="Business card reverse" inert aria-hidden="true">
+<div class="embossed-frame" aria-hidden="true"></div>
+<header class="back-header"><button class="wordmark" id="home">Alec Rostamian</button><button class="text-button" id="flip-back">flip back</button></header>
+<div class="back-content">
+<nav class="menu" id="menu" aria-label="Portfolio sections">
+<a href="#projects">Projects</a><a href="#cv">CV</a><a href="#contact">Contact</a>
+</nav>
+<article class="detail" id="detail" hidden tabindex="-1"></article>
+</div>
+<footer class="back-footer">
+<div class="audio-player" id="audio-player" aria-label="Music player">
+<button id="audio-play" class="audio-play" aria-label="Play soundtrack" disabled><span id="play-symbol" aria-hidden="true">▷</span></button>
+<div class="audio-info"><div class="audio-title"><span id="audio-title">Arabesque · Claude Debussy</span> <span class="equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div><div class="audio-progress"><span id="audio-time">0:00</span><input id="audio-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Soundtrack progress" disabled><span id="audio-duration">–:––</span></div><span class="audio-status" id="audio-status" role="status">Claude Debussy · loops automatically</span><a class="audio-source-link" id="audio-credit" hidden target="_blank" rel="noopener noreferrer"></a></div>
+</div><span class="edition">Portfolio · 01</span>
+</footer><audio id="audio" loop preload="metadata"></audio>
+</section>
+</div>
+</main>
+<template id="projects-content"><button class="return-button">Back to card</button><p class="eyebrow">Selected work</p><h2>Projects</h2><div class="project"><span class="project-number">01</span><div><h3>NBA live win probability</h3><p>Research into preseason rotations, substitutions, and how changing lineups affect a game's outcome.</p><span class="status">Research in progress</span></div></div><div class="project"><span class="project-number">02</span><div><h3>Early-rotation score prediction</h3><p>Exploring what the first few rotations can tell us about a team's final score.</p><span class="status">Research in progress</span></div></div><div class="project demo-project"><span class="project-number">03</span><div><h3>Monte Carlo studio</h3><p>A space for interactive simulations and probability experiments.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">04</span><div><h3>Market microstructure</h3><p>A space for visualizing order books and trading activity.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">05</span><div><h3>Forecasting lab</h3><p>A space for comparing time-series models and their uncertainty.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">06</span><div><h3>Network explorer</h3><p>A space for visualizing connections and graph-based models.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">07</span><div><h3>Optimization playground</h3><p>A space for explaining constrained optimization through interactive examples.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">08</span><div><h3>Signal and noise</h3><p>A space for exploring patterns, randomness, and statistical tests.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">09</span><div><h3>Portfolio analytics</h3><p>A space for risk and performance visualizations.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">10</span><div><h3>Data stories</h3><p>A space for turning a dataset into a clear visual explanation.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">11</span><div><h3>Simulation notebook</h3><p>A space for experiments, observations, and reproducible analysis.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">12</span><div><h3>Research archive</h3><p>A space for longer write-ups and completed studies.</p><span class="status">Sample project · layout preview</span></div></div></template>
+<template id="cv-content"><button class="return-button">Back to card</button><p class="eyebrow">Background</p><h2>CV</h2><p class="large-copy">Mathematics of Computation<br>University of California, Los Angeles</p><p class="quiet-copy">The full CV will be added here.</p></template>
+<template id="contact-content"><button class="return-button">Back to card</button><p class="eyebrow">Get in touch</p><h2>Contact</h2><a class="contact-link" href="mailto:alecr2024@gmail.com">alecr2024@gmail.com</a></template>
+<script src="./audio-config.js?v=20261016-migration"></script>
+<script src="./script.js?v=20261016-migration"></script>
+</body></html>
