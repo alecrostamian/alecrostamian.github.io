@@ -67,10 +67,12 @@ function harness(hash=''){
   assert.equal(e.detail.hidden,true);assert.equal(e.menu.hidden,false);
   h.document.fire('keydown',{key:'Escape'});assert.equal(e.card.classes.has('is-flipped'),false);
   h.location.hash='#contact';h.window.fire('hashchange');assert.equal(h.document.title,'Contact · Alec Rostamian');
-  h.document.fire('keydown',{key:'Escape'});h.window.fire('hashchange');assert.equal(h.location.hash,'#card');
+  assert.equal(e.back.classes.has('contact-open'),true,'Contact hides the player footer');assert.equal(e.audio.paused,false,'Contact keeps music playing');
+  const beforeContactReturn=e.audio.playCalls;
+  h.document.fire('keydown',{key:'Escape'});h.window.fire('hashchange');assert.equal(h.location.hash,'#card');assert.equal(e.back.classes.has('contact-open'),false,'Returning restores the player footer');assert.equal(e.audio.playCalls,beforeContactReturn,'Contact navigation does not restart audio');
   e.audio.fire('error');assert.equal(e['audio-status'].textContent,'Audio unavailable');
   assert.equal(h.frames[0].children[0].children.length,3,'Embossed frame has three SVG paths');
-  h=harness('#cv');assert.equal(h.elements.card.classes.has('is-flipped'),true);assert.equal(h.elements.audio.playCalls,0,'Deep link does not autoplay');assert.equal(h.document.title,'Cv · Alec Rostamian');
+  h=harness('#cv');assert.equal(h.elements.card.classes.has('is-flipped'),true);assert.equal(h.elements.audio.playCalls,0,'Deep link does not autoplay');assert.equal(h.document.title,'CV · Alec Rostamian');
   h.location.hash='#unknown';h.window.fire('hashchange');assert.equal(h.elements.menu.hidden,false);
   console.log('PASS: startup, first/repeated flips, persistent playback, manual pause, play/pause, metadata, seek, Projects/Contact/CV routes, return, Escape, unknown route, error status, and frame generation.');
   console.log('These are simulated DOM behavior tests, not rendered-browser or audible-playback tests.');

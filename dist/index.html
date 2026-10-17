@@ -6,7 +6,7 @@
 <title>Alec Rostamian</title>
 <meta name="description" content="Alec Rostamian — projects, curriculum vitae, and contact.">
 <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="./style.css?v=20261016-migration">
+<link rel="stylesheet" href="./style.css?v=20261017-portfolio">
 </head>
 <body>
 <main class="stage" aria-label="Alec Rostamian's portfolio">
@@ -34,9 +34,46 @@
 </section>
 </div>
 </main>
-<template id="projects-content"><button class="return-button">Back to card</button><p class="eyebrow">Selected work</p><h2>Projects</h2><div class="project"><span class="project-number">01</span><div><h3>NBA live win probability</h3><p>Research into preseason rotations, substitutions, and how changing lineups affect a game's outcome.</p><span class="status">Research in progress</span></div></div><div class="project"><span class="project-number">02</span><div><h3>Early-rotation score prediction</h3><p>Exploring what the first few rotations can tell us about a team's final score.</p><span class="status">Research in progress</span></div></div><div class="project demo-project"><span class="project-number">03</span><div><h3>Monte Carlo studio</h3><p>A space for interactive simulations and probability experiments.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">04</span><div><h3>Market microstructure</h3><p>A space for visualizing order books and trading activity.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">05</span><div><h3>Forecasting lab</h3><p>A space for comparing time-series models and their uncertainty.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">06</span><div><h3>Network explorer</h3><p>A space for visualizing connections and graph-based models.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">07</span><div><h3>Optimization playground</h3><p>A space for explaining constrained optimization through interactive examples.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">08</span><div><h3>Signal and noise</h3><p>A space for exploring patterns, randomness, and statistical tests.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">09</span><div><h3>Portfolio analytics</h3><p>A space for risk and performance visualizations.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">10</span><div><h3>Data stories</h3><p>A space for turning a dataset into a clear visual explanation.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">11</span><div><h3>Simulation notebook</h3><p>A space for experiments, observations, and reproducible analysis.</p><span class="status">Sample project · layout preview</span></div></div><div class="project demo-project"><span class="project-number">12</span><div><h3>Research archive</h3><p>A space for longer write-ups and completed studies.</p><span class="status">Sample project · layout preview</span></div></div></template>
-<template id="cv-content"><button class="return-button">Back to card</button><p class="eyebrow">Background</p><h2>CV</h2><p class="large-copy">Mathematics of Computation<br>University of California, Los Angeles</p><p class="quiet-copy">The full CV will be added here.</p></template>
-<template id="contact-content"><button class="return-button">Back to card</button><p class="eyebrow">Get in touch</p><h2>Contact</h2><a class="contact-link" href="mailto:alecr2024@gmail.com">alecr2024@gmail.com</a></template>
-<script src="./audio-config.js?v=20261016-migration"></script>
-<script src="./script.js?v=20261016-migration"></script>
+<template id="projects-content">
+<button class="return-button">Back to card</button>
+<p class="eyebrow">Selected work</p><h2>Projects</h2>
+<div class="project"><span class="project-number">01</span><div>
+<h3><a class="courtsift-link" href="https://courtsift.com/" target="_blank" rel="noopener noreferrer" aria-label="Courtsift.com"><img src="./assets/courtsift-wordmark.png" width="453" height="96" alt="Courtsift"><span class="courtsift-domain" aria-hidden="true">.com</span></a></h3>
+<p>Search every NBA player game with filters for opponents, teammates in or out, starters, and defense rank. Compare players side by side and research player prop lines.</p>
+</div></div>
+<div class="project"><span class="project-number">02</span><div>
+<h3>NBA News Intelligence &amp; Market Analysis</h3>
+<p>Developing a Python/SQL pipeline that ingests NBA reporting from X and official injury reports, converts availability updates into timestamped events, and links them to Kalshi markets.</p>
+<p>Analyzed 18,519 injury-report PDFs and 41.4 million market trades; validated 88 announcement-linked events to study market response to player news.</p>
+<p>Building a fast news feed and experimental market-reaction predictions, with fantasy-waiver insights planned.</p>
+<p class="project-goal"><strong>Ultimately, the goal is to have a live X NBA injury reporting data pipeline with an accompanying model to predict changes in Kalshi betting lines</strong></p>
+<span class="status">Python, SQL · Oct. 2026 – Present</span>
+</div></div>
+<div class="project"><span class="project-number">03</span><div>
+<h3>NBA Shot Make Predictor</h3>
+<p>Built an end-to-end NBA shot make-probability model using enterprise-level data provided via the Oklahoma City Thunder.</p>
+<p>Engineered 58 shot-geometry, defensive-pressure, and player-profile features across 425K+ shots.</p>
+<p>Developed and validated CatBoost, logistic regression, GAM, and LightGBM models, ultimately achieving 0.620 season-holdout log loss with a 5-seed LightGBM ensemble, a 10% improvement over the naive baseline.</p>
+<span class="status">Python (LightGBM, CatBoost, polars, pandas, NumPy, scikit-learn) · Sep. 2026</span>
+</div></div>
+</template>
+<template id="cv-content">
+<button class="return-button">Back to card</button>
+<p class="eyebrow">Background</p><h2>CV</h2>
+<section class="education" aria-label="Education">
+<h3>UCLA · Mathematics of Computation</h3>
+<p>B.S. · Class of 2028<br><strong>GPA: 3.8 / 4.0</strong></p>
+</section>
+<p class="eyebrow experience-heading">Work &amp; research experience</p>
+<section class="experience"><h3>ML Research Assistant</h3><p class="experience-organization">UCLA Mobility Lab</p><p class="experience-meta">Los Angeles, CA<span aria-hidden="true"> · </span>Oct. 2026 – Present</p><ul><li>Incoming undergraduate researching under PI Professor Jiaqi Ma and Postdoc Rui Song</li><li>Supporting autonomous driving research spanning applications with the lab’s two connected and automated vehicles and methods developed using simulated and real-world data.</li></ul></section>
+<section class="experience"><h3>Undergraduate Researcher</h3><p class="experience-organization">BruinML</p><p class="experience-meta">Los Angeles, CA<span aria-hidden="true"> · </span>Jan. 2026 – Present</p><ul><li>Contribute to research on quantum-enhanced reinforcement learning by supporting analysis of QLSA/QLSS-based alternatives to classical least-squares subroutines in linear-bandit and Markov decision process settings</li><li>Assist with quantum-complexity research examining whether a succinct-ground-state promise reduces XZ-Quantum-6-SAT from QMA1 to MA</li><li>Help with an early-stage investigation into whether free-energy variational principles from physics can model distributional dynamics in financial markets</li></ul></section>
+<section class="experience"><h3>Lead Instructor</h3><p class="experience-organization">UCLA Math Circle</p><p class="experience-meta">Los Angeles, CA<span aria-hidden="true"> · </span>Sep. 2025 – Present</p><ul><li>Lead weekly workshops and develop curriculum for advanced high school students in Python, number theory, probability, proof-based linear algebra, and Boolean algebra</li><li>Previously served as an Assistant Instructor, teaching game theory, combinatorics, number theory, Python, and Monte Carlo methods</li></ul></section>
+<section class="experience"><h3>Assistant Instructor</h3><p class="experience-organization">UCLA Discovering Math Summer Institute</p><p class="experience-meta">Los Angeles, CA<span aria-hidden="true"> · </span>Jul. 2025 – Aug. 2025</p><ul><li>Selected as one of two assistant instructors for the pilot year of UCLA’s Discovering College Math Summer Institute, working alongside professors and PhD candidates</li><li>Taught proofs, set theory, counting, and logic to 40 advanced high school students</li></ul></section>
+<section class="experience"><h3>Applied ML Research Assistant</h3><p class="experience-organization">Algoverse</p><p class="experience-meta">Remote<span aria-hidden="true"> · </span>Oct. 2024 – Feb. 2025</p><ul><li>Helped evaluate chain-of-thought prompting and self-optimizing retrieval techniques within an Adaptive-RAG system for medical-domain questions</li><li>Managed the writing process, from initial drafts through materials prepared for workshops and conferences</li><li>Gained experience with PyTorch-based research codebases and retriever-server infrastructure through code review and targeted modifications</li></ul></section>
+<section class="experience"><h3>Summer Intern</h3><p class="experience-organization">NASA Robotics Systems Technology – ER4</p><p class="experience-meta">Houston, TX<span aria-hidden="true"> · </span>Jun. 2024 – Aug. 2024</p><ul><li>Supported robotics operations remotely and on-site at Johnson Space Center’s Space Vehicle Mockup Facility</li><li>Performed maintenance on the Space Exploration Vehicle</li><li>Organized and standardized documentation for 80+ Lunar Terrain Vehicle Ground Testing Unit packages</li></ul></section>
+<section class="experience"><h3>Founder &amp; Board Vice President</h3><p class="experience-organization">Robotics For The Spectrum</p><p class="experience-meta">Los Angeles, CA<span aria-hidden="true"> · </span>Oct. 2022 – Present</p><ul><li>Collaborated with autism-support and behavioral psychology professionals to create an 80-page guide helping robotics teams serve autistic students using existing equipment</li><li>Successfully deployed the program, reaching 50+ students in 2 locations; participants at one location have since formed their own FIRST Tech Challenge team</li></ul></section>
+</template>
+<template id="contact-content"><button class="return-button">Back to card</button><h2>Contact</h2><a class="contact-link" href="mailto:alecjrostamian@gmail.com">alecjrostamian@gmail.com</a></template>
+<script src="./audio-config.js?v=20261017-portfolio"></script>
+<script src="./script.js?v=20261017-portfolio"></script>
 </body></html>

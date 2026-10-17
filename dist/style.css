@@ -8,3 +8,20 @@
 html,body{height:100%;overflow:hidden}.stage{height:100dvh;min-height:0}.face{overflow:hidden}.back{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:20px}.back .embossed-frame{position:absolute}.back-header,.back-footer{flex-shrink:0}.back-content,.back.detail-open .back-content{min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#afb7ac transparent;padding:28px 16px 32px;align-items:flex-start;scrollbar-gutter:stable}.back-content:has(.menu:not([hidden])){align-items:center}.back.detail-open .back-footer{order:initial}.detail{flex-shrink:0;padding-top:0}.back-footer{padding-top:0;padding-bottom:0}.menu{flex-shrink:0}@media(max-width:650px){.stage{height:100dvh;min-height:0}.back{padding:40px 34px;gap:16px}.back-content,.back.detail-open .back-content{min-height:0;padding:20px 8px}.back-footer{gap:12px}.back-footer .edition{display:none}.menu{gap:24px}}@media(max-height:550px){.back{padding:28px 42px;gap:10px}.back-content,.back.detail-open .back-content{padding:14px 12px}.back-header .wordmark,.back-header .text-button{padding:3px 0}.embossed-frame{inset:16px}.front .flip-button{bottom:42px}.back-footer .audio-status,.back-footer .audio-source-link{margin-top:4px}}
 /* Fine engraved frame with clipped, inward-curving corner returns. */
 .embossed-frame{border:0;box-shadow:none;z-index:2}.embossed-frame svg{display:block;width:100%;height:100%;overflow:visible;fill:none;pointer-events:none}.frame-shadow{stroke:#aeb6ae;stroke-width:1.35}.frame-highlight{stroke:#fffffa;stroke-width:1.2}.frame-inner{stroke:#c4cac0;stroke-width:.6;opacity:.8}
+
+/* Resume content and the original Courtsift wordmark. */
+.project>div{min-width:0}.project .project-goal{color:var(--ink)}
+.courtsift-link{display:inline-flex;align-items:baseline;max-width:100%;gap:1px;text-decoration:none;color:#ab4738;line-height:1}
+.courtsift-link img{display:block;width:clamp(125px,22vw,185px);max-width:72%;height:auto;align-self:center}
+.courtsift-domain{font-family:Georgia,'Times New Roman',serif;font-size:clamp(23px,3.6vw,34px);font-weight:900;letter-spacing:-.06em}
+.courtsift-link:hover{opacity:.8}
+.education{margin:0 0 34px}.education h3{font-size:clamp(22px,3vw,30px);font-weight:400;line-height:1.4;margin:0 0 12px}
+.education p,.experience p,.experience li{font-family:Arial,sans-serif;font-size:15px;line-height:1.65;color:#616763}
+.education p{margin:0}.education strong{font-weight:600;color:var(--ink)}
+.experience-heading{margin:0 0 18px}.experience{border-top:1px solid var(--line);padding:24px 0}
+.experience h3{font-size:22px;line-height:1.35;font-weight:400;margin:0 0 5px}
+.experience .experience-organization{font-size:16px;margin:0 0 4px;color:var(--ink)}
+.experience .experience-meta{font-size:12px;margin:0 0 14px;color:var(--muted)}
+.experience ul{margin:0;padding-left:19px}.experience li{padding-left:3px;margin-bottom:8px}.experience li:last-child{margin-bottom:0}
+.back.contact-open{grid-template-rows:auto minmax(0,1fr)}.back.contact-open .back-footer{display:none}
+@media(max-width:650px){.project{gap:15px}.experience{padding:21px 0}.experience h3{font-size:21px}.education{margin-bottom:30px}}
