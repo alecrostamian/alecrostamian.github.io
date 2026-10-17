@@ -12,6 +12,7 @@ class Element {
     this.listeners={}; this.attributes={}; this.classes=new Set();
     this.classList={add:n=>this.classes.add(n),remove:n=>this.classes.delete(n),toggle:(n,v)=>v?this.classes.add(n):this.classes.delete(n)};
     this.children=[]; this.clientWidth=600; this.clientHeight=400;
+    this.scrollTop=0; this.scrollLeft=0; this.offsetHeight=400; this.parentElement=null;
     this.currentTime=0; this.duration=NaN; this.paused=true; this.playCalls=0;
     this.content={cloneNode:()=>new Element('cloned-template')};
   }
@@ -21,26 +22,40 @@ class Element {
   replaceChildren(...nodes){this.children=nodes; this.returnButton=new Element('return-button');}
   append(node){this.children.push(node);}
   querySelector(selector){return selector==='.return-button'?this.returnButton:null;}
-  focus(){this.focused=true;}
+  contains(element){return element===this||this.children.some(child=>child.contains(element));}
+  focus(options){this.focused=true;this.focusOptions=options;if(this.ownerDocument)this.ownerDocument.activeElement=this;}
+  blur(){this.focused=false;if(this.ownerDocument&&this.ownerDocument.activeElement===this)this.ownerDocument.activeElement=this.ownerDocument.body;}
   play(){this.playCalls++;this.paused=false;this.fire('play');return Promise.resolve();}
   pause(){this.paused=true;this.fire('pause');}
   click(){this.fire('click');}
 }
-function harness(hash=''){
+function harness(hash='',viewport={width:390,height:844}){
   const ids=['card','front','back','menu','detail','audio','audio-play','audio-seek','audio-status','audio-player','audio-title','audio-credit','play-symbol','audio-time','audio-duration','home','flip','flip-back','projects-content','cv-content','contact-content'];
   const elements=Object.fromEntries(ids.map(id=>[id,new Element(id)]));
   elements.detail.hidden=true;
   const scroll = new Element('back-content');
+  const stage=new Element('stage'),body=new Element('body'),root=new Element('html');
+  stage.clientWidth=viewport.width;stage.clientHeight=viewport.height;
+  elements.card.children=[elements.front,elements.back];
+  elements.front.children=[elements.flip];
+  elements.back.children=[elements.home,elements['flip-back'],scroll];
+  scroll.children=[elements.menu,elements.detail];
   const frames=[new Element('frame-front'),new Element('frame-back')];
-  const document={...new Element('document'), title:'',querySelector:s=>s==='.back-content'?scroll:elements[s.slice(1)],querySelectorAll:s=>s==='.embossed-frame'?frames:[],createElementNS:(ns,tag)=>new Element(tag),addEventListener:Element.prototype.addEventListener,fire:Element.prototype.fire};
+  const document={...new Element('document'), title:'',activeElement:body,body,scrollingElement:root,querySelector:s=>s==='.back-content'?scroll:s==='.stage'?stage:elements[s.slice(1)],querySelectorAll:s=>s==='.embossed-frame'?frames:[],createElementNS:(ns,tag)=>new Element(tag),addEventListener:Element.prototype.addEventListener,fire:Element.prototype.fire};
+  for(const element of [...Object.values(elements),scroll,stage,body,root])element.ownerDocument=document;
   const window=new Element('window');
+  window.innerWidth=viewport.width;window.innerHeight=viewport.height;
+  const pendingFrames=new Map();let nextFrame=0;
+  function requestAnimationFrame(fn){pendingFrames.set(++nextFrame,fn);return nextFrame;}
+  function cancelAnimationFrame(id){pendingFrames.delete(id);}
+  function flushFrame(){const batch=[...pendingFrames.values()];pendingFrames.clear();for(const fn of batch)fn();}
   const location={_hash:hash,pathname:'/',search:'',get hash(){return this._hash;},set hash(value){this._hash=value&&!value.startsWith('#')?'#'+value:value;}};
   const history={replaceState:()=>{location.hash='';}};
-  const context=vm.createContext({document,window,location,history,ResizeObserver:class{observe(){}},console,Number,String,Math});
+  const context=vm.createContext({document,window,location,history,ResizeObserver:class{observe(){}},requestAnimationFrame,cancelAnimationFrame,console,Number,String,Math});
   vm.runInContext(config+'\n'+script,context);
-  return {elements,document,window,location,context,scroll,frames};
+  return {elements,document,window,location,context,scroll,frames,stage,root,body,pendingFrames,flushFrame};
 }
-(async()=>{
+async function runBehaviorTests(){
   let h=harness(); const {elements:e}=h;
   assert.equal(e.audio.src,'./assets/debussy-arabesque.mp3');
   assert.equal(e['audio-play'].disabled,false);
@@ -61,6 +76,13 @@ function harness(hash=''){
   e.audio.duration=251.350204;e.audio.currentTime=60;e.audio.fire('loadedmetadata');
   assert.equal(e['audio-duration'].textContent,'4:11');assert.equal(e['audio-time'].textContent,'1:00');
   e['audio-seek'].value=50;e['audio-seek'].fire('input');assert.equal(e.audio.currentTime,125.675102);
+  const uninterruptedTime=e.audio.currentTime,uninterruptedPlayCalls=e.audio.playCalls;
+  h.scroll.scrollTop=2400;h.scroll.scrollLeft=32;
+  e['flip-back'].click();e.flip.click();e['flip-back'].click();e.flip.click();
+  h.flushFrame();
+  assert.equal(e.audio.paused,false,'Rapid deep-scroll flips keep music playing');
+  assert.equal(e.audio.currentTime,uninterruptedTime,'Rapid flips never seek or reset audio');
+  assert.equal(e.audio.playCalls,uninterruptedPlayCalls,'Rapid flips do not restart playback');
   h.location.hash='#projects';h.window.fire('hashchange');
   assert.equal(e.detail.hidden,false);assert.equal(e.menu.hidden,true);assert.equal(h.scroll.scrollTop,0);assert.equal(h.document.title,'Projects · Alec Rostamian');
   e.detail.querySelector('.return-button').click();h.window.fire('hashchange');
@@ -76,4 +98,7 @@ function harness(hash=''){
   h.location.hash='#unknown';h.window.fire('hashchange');assert.equal(h.elements.menu.hidden,false);
   console.log('PASS: startup, first/repeated flips, persistent playback, manual pause, play/pause, metadata, seek, Projects/Contact/CV routes, return, Escape, unknown route, error status, and frame generation.');
   console.log('These are simulated DOM behavior tests, not rendered-browser or audible-playback tests.');
-})().catch(error=>{console.error(error);process.exitCode=1;});
+}
+module.exports={harness};
+if(require.main===module)runBehaviorTests().catch(error=>{console.error(error);process.exitCode=1;});
+

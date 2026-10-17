@@ -25,3 +25,10 @@ html,body{height:100%;overflow:hidden}.stage{height:100dvh;min-height:0}.face{ov
 .experience ul{margin:0;padding-left:19px}.experience li{padding-left:3px;margin-bottom:8px}.experience li:last-child{margin-bottom:0}
 .back.contact-open{grid-template-rows:auto minmax(0,1fr)}.back.contact-open .back-footer{display:none}
 @media(max-width:650px){.project{gap:15px}.experience{padding:21px 0}.experience h3{font-size:21px}.education{margin-bottom:30px}}
+
+
+/* A route owns its scroll position. Stop stale momentum/anchoring on navigation. */
+.back-content{min-width:0;scroll-behavior:auto;overflow-anchor:none}
+.back .back-content.is-resetting-scroll{overflow-y:hidden;touch-action:none}
+/* Clip stationary card shells without creating extra programmatic scrollports. */
+@supports(overflow:clip){.stage,.face{overflow:clip}}

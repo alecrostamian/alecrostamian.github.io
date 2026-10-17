@@ -15,11 +15,72 @@ const formatTime=n=>Number.isFinite(n)?Math.floor(n/60)+':'+String(Math.floor(n%
 function updateAudio(){const playing=!audio.paused;audioPlayer.classList.toggle('is-playing',playing);document.querySelector('#play-symbol').textContent=playing?'Ⅱ':'▷';audioPlay.setAttribute('aria-label',playing?'Pause soundtrack':'Play soundtrack');document.querySelector('#audio-time').textContent=formatTime(audio.currentTime);document.querySelector('#audio-duration').textContent=formatTime(audio.duration);audioSeek.disabled=!Number.isFinite(audio.duration)||audio.duration<=0;if(!audioSeek.disabled)audioSeek.value=audio.currentTime/audio.duration*100;}
 async function playAudio(){if(!AUDIO_SOURCE)return;try{await audio.play();musicHasStarted=true;audioStatus.textContent=AUDIO_CREDIT+' · loops automatically';}catch{audioStatus.textContent='Press play to start the soundtrack';}updateAudio();}
 audioPlay.addEventListener('click',()=>{if(audio.paused)playAudio();else audio.pause();});audioSeek.addEventListener('input',()=>{if(Number.isFinite(audio.duration))audio.currentTime=Number(audioSeek.value)/100*audio.duration;});['timeupdate','loadedmetadata','play','pause','ended'].forEach(event=>audio.addEventListener(event,updateAudio));audio.addEventListener('error',()=>{audioStatus.textContent='Audio unavailable';audioPlayer.classList.remove('is-playing');});
-function setFlipped(value,play=false){flipped=value;card.classList.toggle('is-flipped',value);front.inert=value;back.inert=!value;front.setAttribute('aria-hidden',String(value));back.setAttribute('aria-hidden',String(!value));if(value){if(play&&!musicHasStarted)playAudio();document.querySelector('#home').focus({preventScroll:true});}else{document.querySelector('#flip').focus({preventScroll:true});}}
-function renderRoute(){const name=location.hash.slice(1);back.classList.toggle('contact-open',name==='contact');if(['projects','cv','contact'].includes(name)){if(!flipped)setFlipped(true);menu.hidden=true;detail.hidden=false;detail.replaceChildren(document.querySelector('#'+name+'-content').content.cloneNode(true));back.classList.add('detail-open');detail.querySelector('.return-button').addEventListener('click',()=>{location.hash='card'});document.querySelector(".back-content").scrollTop=0;detail.focus({preventScroll:true});document.title=(name==='cv'?'CV':name.charAt(0).toUpperCase()+name.slice(1))+' · Alec Rostamian';}else{detail.hidden=true;menu.hidden=false;back.classList.remove('detail-open');document.title='Alec Rostamian';if(name==='card'&&!flipped)setFlipped(true);else if(!name&&flipped)setFlipped(false);}}
-document.querySelector('#flip').addEventListener('click',()=>{setFlipped(true,true);if(location.hash!=='#card')location.hash='card';});document.querySelector('#flip-back').addEventListener('click',()=>{setFlipped(false);history.replaceState(null,'',location.pathname+location.search);renderRoute();});document.querySelector('#home').addEventListener('click',()=>{location.hash='card';});window.addEventListener('hashchange',renderRoute);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&flipped){if(!detail.hidden){location.hash='card';}else{document.querySelector('#flip-back').click();}}});renderRoute();
+const backContent=document.querySelector('.back-content'),stage=document.querySelector('.stage');
+let scrollResetFrame=0;
+let hasRenderedRoute=false;
+function releaseCardFocus(){
+  if(card.contains(document.activeElement))document.activeElement.blur();
+}
+function clearCardScroll(){
+  // overflow:hidden containers can still be moved by focus on transformed faces.
+  for(const element of [backContent,front,back,stage,document.scrollingElement]){
+    if(element){element.scrollTop=0;element.scrollLeft=0;}
+  }
+}
+function resetCardScroll(){
+  cancelAnimationFrame(scrollResetFrame);
+  // End touch momentum before replacing long content or rotating its scroll layer.
+  backContent.classList.add('is-resetting-scroll');
+  void backContent.offsetHeight;
+  clearCardScroll();
+  scrollResetFrame=requestAnimationFrame(()=>{
+    clearCardScroll();
+    backContent.classList.remove('is-resetting-scroll');
+    scrollResetFrame=0;
+  });
+}
+function focusVisibleContent(){
+  const target=flipped?(detail.hidden?document.querySelector('#home'):detail):document.querySelector('#flip');
+  target.focus({preventScroll:true});
+}
+function setFlipped(value,play=false){
+  releaseCardFocus();
+  flipped=value;
+  card.classList.toggle('is-flipped',value);
+  front.inert=value;back.inert=!value;
+  front.setAttribute('aria-hidden',String(value));back.setAttribute('aria-hidden',String(!value));
+  if(value&&play&&!musicHasStarted)playAudio();
+  focusVisibleContent();
+  resetCardScroll();
+}
+function renderRoute(){
+  const name=location.hash.slice(1);
+  // Move focus out before its section is hidden or replaced. This avoids the
+  // browser scrolling a hidden/transformed ancestor to retain the old focus.
+  releaseCardFocus();
+  back.classList.toggle('contact-open',name==='contact');
+  if(['projects','cv','contact'].includes(name)){
+    menu.hidden=true;detail.hidden=false;
+    detail.replaceChildren(document.querySelector('#'+name+'-content').content.cloneNode(true));
+    back.classList.add('detail-open');
+    detail.querySelector('.return-button').addEventListener('click',()=>{location.hash='card'});
+    if(!flipped)setFlipped(true);
+    document.title=(name==='cv'?'CV':name.charAt(0).toUpperCase()+name.slice(1))+' · Alec Rostamian';
+  }else{
+    detail.hidden=true;menu.hidden=false;
+    back.classList.remove('detail-open');
+    document.title='Alec Rostamian';
+    if(name==='card'&&!flipped)setFlipped(true);
+    else if(!name&&flipped)setFlipped(false);
+  }
+  if(flipped||hasRenderedRoute)focusVisibleContent();
+  hasRenderedRoute=true;
+  resetCardScroll();
+}
+document.querySelector('#flip').addEventListener('click',()=>{setFlipped(true,true);if(location.hash!=='#card')location.hash='card';});document.querySelector('#flip-back').addEventListener('click',()=>{setFlipped(false);history.replaceState(null,'',location.pathname+location.search);renderRoute();});document.querySelector('#home').addEventListener('click',()=>{if(location.hash==='#card')renderRoute();else location.hash='card';});window.addEventListener('hashchange',renderRoute);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&flipped){if(!detail.hidden){location.hash='card';}else{document.querySelector('#flip-back').click();}}});renderRoute();
 // The reference uses a fine inset frame with shaped, clipped corner returns.
 function framePath(width,height,inset=3){const x=inset,y=inset,w=Math.max(1,width-2*inset),h=Math.max(1,height-2*inset),r=Math.min(12,w/8,h/8);return `M ${x+r} ${y} H ${x+w-r} Q ${x+w-r} ${y+r} ${x+w} ${y+r} V ${y+h-r} Q ${x+w-r} ${y+h-r} ${x+w-r} ${y+h} H ${x+r} Q ${x+r} ${y+h-r} ${x} ${y+h-r} V ${y+r} Q ${x+r} ${y+r} ${x+r} ${y} Z`;}
 const ns='http://www.w3.org/2000/svg';
 function drawFrame(frame){const w=frame.clientWidth,h=frame.clientHeight;if(!w||!h)return;const svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.setAttribute('aria-hidden','true');svg.setAttribute('focusable','false');[['frame-shadow',3,0],['frame-highlight',3,1.2],['frame-inner',6,0]].forEach(([cls,inset,offset])=>{const path=document.createElementNS(ns,'path');path.setAttribute('d',framePath(w,h,inset));path.setAttribute('class',cls);if(offset)path.setAttribute('transform',`translate(${offset} ${offset})`);svg.append(path);});frame.replaceChildren(svg);}
 const frameObserver=new ResizeObserver(entries=>entries.forEach(entry=>drawFrame(entry.target)));document.querySelectorAll('.embossed-frame').forEach(frame=>{frameObserver.observe(frame);drawFrame(frame);});
+

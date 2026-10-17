@@ -64,3 +64,9 @@ assert len(list(dist.rglob('*.mp3')))==1
 assert not list(dist.rglob('*.pdf')),'No resume PDFs should be published'
 assert (dist/'.nojekyll').is_file()
 print('PASS: references, IDs, audio, three ordered projects, exact bold goal, all seven CV experiences, UCLA/GPA, minimal Contact/email, contained scrolling, and publish-directory exclusions.')
+
+
+assert '.back .back-content.is-resetting-scroll{overflow-y:hidden;touch-action:none}' in css
+assert 'overflow-anchor:none' in css and '@supports(overflow:clip){.stage,.face{overflow:clip}}' in css
+assert 'style.css?v=20261017-mobile-flip' in html and 'script.js?v=20261017-mobile-flip' in html
+print('PASS: momentum-reset CSS specificity, stationary-shell clipping, anchoring, and cache-busted navigation assets.')

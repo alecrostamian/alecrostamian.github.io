@@ -11,6 +11,7 @@ A static, Ocean's Eleven-inspired business-card portfolio. No backend, package i
 - `dist/assets/debussy-arabesque.mp3`: owner-supplied, approved recording.
 - `.github/workflows/pages.yml`: deploys only `dist/` to GitHub Pages after pushes to `main` or manual runs.
 - `tests/behavior.test.cjs`: dependency-free simulated-DOM behavior checks.
+- `tests/mobile_navigation.test.cjs`: retained-scroll, focus, and rapid-navigation regressions.
 
 ## GitHub Pages setup
 
@@ -51,7 +52,29 @@ Run:
 node --check dist/script.js
 node --check dist/audio-config.js
 node tests/behavior.test.cjs
+node tests/mobile_navigation.test.cjs
 python tests/check_static.py
 ```
 
 The simulated-DOM tests cover initial loading, first and repeated flips, persistent playback, pause preservation, play/pause, time display, seeking, section navigation, return, Escape, unknown routes, error status, and SVG frame generation. The static checks also verify the three-project order, exact goal statement, all seven CV entries, GPA, exact email, and Contact’s minimal content. These checks do not replace rendered-browser and actual-audio testing. For this update, headless Chromium could not start because the environment denied its required socket operation; rendered desktop/mobile QA was unavailable.
+
+
+
+## Mobile flip regression
+
+Navigation resets both scroll axes of the content region and any scrollable card
+ancestors. Focus leaves the outgoing content before it is hidden, and is moved to
+the visible front button, menu header, or new section with `preventScroll`.
+The content scroller briefly disables scrolling through the next animation frame
+to discard touch momentum. Rapid navigation cancels the previous pending reset.
+Supported browsers use `overflow: clip` on the stationary shells, avoiding extra
+focus-scrollable containers while keeping the 3D card animation and single audio
+element intact.
+
+The regression test deliberately retains a deep scroll offset after content is
+hidden; it fails with the old script and passes with the fix. It covers all three
+sections, both flip directions, return/home/Escape, hash/history route changes,
+same-hash navigation, rapid reversals, and delayed momentum at synthetic mobile
+and desktop dimensions. These are state simulations, not a WebKit rendering test.
+Rendered mobile Safari verification remains required on an actual device; the
+available headless browser could not launch under the execution sandbox.

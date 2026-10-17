@@ -18,6 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check portfolio
+        run: |
+          node --check dist/script.js
+          node --check dist/audio-config.js
+          node tests/behavior.test.cjs
+          node tests/mobile_navigation.test.cjs
+          python3 tests/check_static.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -25,3 +32,4 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
